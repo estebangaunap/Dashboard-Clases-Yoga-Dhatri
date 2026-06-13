@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Dhatri — KPIs Clases de Yoga</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root {
+  --bg:       #f0f4f0;
+  --card:     #ffffff;
+  --primary:  #2e5c3e;
+  --plight:   #4a7c59;
+  --accent:   #c9a96e;
+  --blue:     #1B4F91;
+  --purple:   #534AB7;
+  --text:     #1a2e24;
+  --muted:    #6b8c78;
+  --danger:   #c0392b;
+  --success:  #0F6E56;
+  --warn:     #E67E22;
+  --border:   #dde8dc;
+  --shadow:   0 2px 14px rgba(0,0,0,.07);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text)}
+
+/* ── HEADER ── */
+header{
+  background:linear-gradient(135deg,var(--primary) 0%,#1a3a28 100%);
+  color:#fff;padding:20px 32px;
+  display:flex;align-items:center;justify-content:space-between;
+  box-shadow:0 2px 10px rgba(0,0,0,.25);
+}
+.logo{font-size:22px;font-weight:700;letter-spacing:.5px}
+.logo span{color:var(--accent)}
+.meta{text-align:right;font-size:12px;opacity:.8;line-height:1.6}
+.meta strong{display:block;font-size:14px;opacity:1;color:#fff}
+
+/* ── LAYOUT ── */
+.container{max-width:1360px;margin:0 auto;padding:24px 24px 48px}
+
+/* ── SECTION TITLE ── */
+.sec{
+  font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.9px;
+  color:var(--muted);margin:28px 0 14px;
+  display:flex;align-items:center;gap:10px;
+}
+.sec::after{content:'';flex:1;height:1px;background:var(--border)}
+.sec .src-badge{
+  font-size:9px;font-weight:700;letter-spacing:.5px;padding:2px 8px;
+  border-radius:20px;text-transform:uppercase;
+}
+.src-wix    {background:#e8f3ff;color:#1a5fa8}
+.src-notion {background:#e8e8ff;color:#534AB7}
+.src-combo  {background:#e8f5ec;color:#2e5c3e}
+
+/* ── EJE SUBTITLE ── */
+.eje{
+  font-size:12px;font-weight:800;letter-spacing:.6px;margin:16px 0 8px;
+  display:flex;align-items:center;gap:8px;text-transform:uppercase;
+}
+.eje::before{content:'';width:6px;height:18px;border-radius:3px;display:inline-block}
+.eje.e1::before{background:var(--blue)}
+.eje.e2::before{background:var(--purple)}
+.eje.e3::before{background:var(--success)}
+.eje.e1{color:var(--blue)}
+.eje.e2{color:var(--purple)}
+.eje.e3{color:var(--success)}
+
+/* ── KPI GRID ── */
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin-bottom:18px}
+.kpi{
+  background:var(--card);border-radius:12px;padding:18px 20px;
+  box-shadow:var(--shadow);border-top:4px solid var(--primary);
+  display:flex;flex-direction:column;gap:5px;
+}
+.kpi.blue   {border-top-color:var(--blue)}
+.kpi.purple {border-top-color:var(--purple)}
+.kpi.accent {border-top-color:var(--accent)}
+.kpi.warn   {border-top-color:var(--warn)}
+.kpi.danger {border-top-color:var(--danger)}
+.kpi.success{border-top-color:var(--success)}
+.kpi-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted)}
+.kpi-val{font-size:34px;font-weight:800;line-height:1;color:var(--text)}
+.kpi-sub{font-size:11px;color:var(--muted);line-height:1.4}
+.up  {color:var(--success);font-weight:700}
+.down{color:var(--danger);font-weight:700}
+.neu {color:var(--warn);font-weight:700}
+
+/* ── CHART GRID ── */
+.chart-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px}
+.chart-card{background:var(--card);border-radius:12px;padding:22px;box-shadow:var(--shadow)}
+.chart-card h3{font-size:13px;font-weight:700;color:var(--text);margin-bottom:14px;
+  display:flex;align-items:center;gap:8px}
+.chart-wrap{position:relative;height:230px}
+.chart-wrap.tall{height:290px}
+.chart-wrap.xtall{height:340px}
+
+/* ── TABLES ── */
+.tables-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:18px}
+.tcard{background:var(--card);border-radius:12px;box-shadow:var(--shadow);overflow:hidden}
+.tcard-head{
+  font-size:13px;font-weight:700;padding:14px 18px;
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.badge{
+  background:var(--primary);color:#fff;border-radius:20px;
+  font-size:10px;padding:2px 9px;font-weight:600
+}
+.badge.muted{background:var(--muted)}
+.badge.warn{background:var(--warn)}
+table{width:100%;border-collapse:collapse}
+thead th{
+  font-size:10px;text-transform:uppercase;letter-spacing:.5px;
+  color:var(--muted);padding:9px 14px;text-align:left;
+  background:#f7faf7;font-weight:700;
+}
+tbody td{padding:9px 14px;font-size:13px;border-top:1px solid var(--border);vertical-align:middle}
+tbody tr:hover{background:#f4f8f4}
+
+/* ── RANKING TABLE ── */
+.rank-num{
+  width:26px;height:26px;border-radius:50%;
+  display:inline-flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:700;color:#fff;background:var(--muted);
+}
+.rank-1{background:#d4af37}
+.rank-2{background:#a8a9ad}
+.rank-3{background:#cd7f32}
+
+/* Fill-rate bar */
+.fill-bar{height:8px;border-radius:4px;background:#e8ede8;position:relative;min-width:80px}
+.fill-bar-inner{height:8px;border-radius:4px;background:var(--primary);transition:width .4s}
+.fill-bar-inner.good  {background:var(--success)}
+.fill-bar-inner.medium{background:var(--warn)}
+.fill-bar-inner.low   {background:var(--danger)}
+
+/* Trend arrows */
+.trend-up{color:var(--success);font-weight:700}
+.trend-down{color:var(--danger);font-weight:700}
+.trend-flat{color:var(--muted);font-weight:700}
+
+/* ── ALERT BOX ── */
+.alert-box{
+  background:#fffbf0;border-left:4px solid var(--warn);border-radius:0 10px 10px 0;
+  padding:12px 16px;font-size:12px;color:#7a4f00;line-height:1.6;margin-top:6px;
+}
+.note-box{
+  background:#eef6f1;border-left:4px solid var(--success);border-radius:0 10px 10px 0;
+  padding:12px 16px;font-size:12px;color:#1a4d3a;line-height:1.6;margin-top:6px;
+}
+
+/* ── FOOTER ── */
+footer{
+  text-align:center;padding:20px;font-size:11px;color:var(--muted);
+  border-top:1px solid var(--border);margin-top:12px;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">dh<span>a</span>tri <span style="font-size:13px;font-weight:400;opacity:.7">· KPIs Clases de Yoga</span></div>
+  <div class="meta">
+    <strong id="fechaHdr"></strong>
+    Datos: Wix Bookings (12 meses) + Notion CRM &nbsp;·&nbsp; Actualización manual
+  </div>
+</header>
+
+<div class="container">
+
+<!-- ═══════════════════════════════════════════════════════════
+     SECCIÓN 1 — RESUMEN DEL MES (3 EJES) + COMPARACIÓN MES ANTERIOR
+═══════════════════════════════════════════════════════════ -->
+<div class="sec">📅 Resumen del Mes — Mayo 2026
+  <span class="src-badge src-combo">Notion + Wix · comparado con Abril 2026</span>
+</div>
+
+<div class="eje e1">Eje 1 · Captación</div>
+<div class="kpi-grid">
+  <div class="kpi blue">
+    <div class="kpi-lbl">KPI 1 · Nuevos inscrit@s</div>
+    <div class="kpi-val">15</div>
+    <div class="kpi-sub"><span class="up">▲ +15.4%</span> vs abril (13)</div>
+  </div>
+  <div class="kpi blue">
+    <div class="kpi-lbl">KPI 2 · Prospectos nuevos del mes</div>
+    <div class="kpi-val">66</div>
+    <div class="kpi-sub"><span class="up">▲ +61%</span> vs abril (41)</div>
+  </div>
+  <div class="kpi accent">
+    <div class="kpi-lbl">Mezcla de canal (activos)</div>
+    <div class="kpi-val" style="font-size:22px;padding-top:4px">47% Orgánico</div>
+    <div class="kpi-sub">27% Publicidad · 25% sin canal registrado</div>
+  </div>
+</div>
+
+<div class="eje e2">Eje 2 · Conversión</div>
+<div class="kpi-grid">
+  <div class="kpi purple">
+    <div class="kpi-lbl">KPI 4 · Conversión clase prueba → inscripción</div>
+    <div class="kpi-val">69%</div>
+    <div class="kpi-sub">76 de 110 históricos · <span class="neu">métrica acumulada, no varía mes a mes</span></div>
+  </div>
+  <div class="kpi danger">
+    <div class="kpi-lbl">KPI 5 · Leads fríos (&gt;7 días sin contacto)</div>
+    <div class="kpi-val">180</div>
+    <div class="kpi-sub"><span class="down">▲ +34.3%</span> vs abril (134) · meta: 0</div>
+  </div>
+  <div class="kpi purple">
+    <div class="kpi-lbl">Pipeline activo (al corte)</div>
+    <div class="kpi-val">226</div>
+    <div class="kpi-sub">Leads en proceso de conversión</div>
+  </div>
+</div>
+
+<div class="eje e3">Eje 3 · Retención / Clases</div>
+<div class="kpi-grid">
+  <div class="kpi success">
+    <div class="kpi-lbl">Clases grupales dictadas</div>
+    <div class="kpi-val">120</div>
+    <div class="kpi-sub"><span class="down">▼ -2.4%</span> vs abril (123) · sin contar terapias/masajes</div>
+  </div>
+  <div class="kpi success">
+    <div class="kpi-lbl">Reservas en clases grupales</div>
+    <div class="kpi-val">≈708</div>
+    <div class="kpi-sub">120 clases × 5.9 alumnos prom. · abril ≈713</div>
+  </div>
+  <div class="kpi warn">
+    <div class="kpi-lbl">Tasa de cancelación</div>
+    <div class="kpi-val">10%</div>
+    <div class="kpi-sub"><span class="up">▼ -0.6pp</span> vs abril (10.6%) · incluye toda la agenda (clases + terapias)</div>
+  </div>
+  <div class="kpi success">
+    <div class="kpi-lbl">Promedio alumnos / clase grupal</div>
+    <div class="kpi-val">5.9</div>
+    <div class="kpi-sub"><span class="up">▲ +1.7%</span> vs abril (5.8) · solo clases de yoga</div>
+  </div>
+  <div class="kpi success">
+    <div class="kpi-lbl">Practicantes activos (regulares)</div>
+    <div class="kpi-val">108</div>
+    <div class="kpi-sub"><span class="down">▼ -4.4%</span> vs abril (113) · personas únicas con plan de clases regular</div>
+  </div>
+  <div class="kpi purple">
+    <div class="kpi-lbl">Practicantes en formación</div>
+    <div class="kpi-val">11</div>
+    <div class="kpi-sub"><span class="down">▼ -8.3%</span> vs abril (12) · alumnos de programas de formación que también toman clases</div>
+  </div>
+  <div class="kpi warn">
+    <div class="kpi-lbl">Solo clase de prueba (resto)</div>
+    <div class="kpi-val">20</div>
+    <div class="kpi-sub"><span class="up">▲ +53.8%</span> vs abril (13) · vinieron únicamente con su clase de prueba gratuita</div>
+  </div>
+</div>
+
+<div class="note-box">
+  <strong>🆕 Nuevo indicador — "Practicantes" (desglose):</strong> del total de personas únicas que tomaron al menos
+  una clase grupal de yoga en el mes, se distinguen tres grupos: <strong>practicantes activos</strong> (sostienen su
+  práctica con un plan de clases regular), <strong>practicantes en formación</strong> (cursan algún programa de
+  formación de Dhatri — instructorado, niveles, técnico, etc. — y además toman clases grupales) y <strong>el
+  resto</strong> (vinieron únicamente con su clase de prueba gratuita, todavía no son practicantes regulares).
+  En mayo: 139 personas distintas tomaron clases → 108 activos + 11 en formación + 20 solo con clase de prueba
+  = 139. En abril: 138 personas → 113 activos + 12 en formación + 13 solo con clase de prueba = 138. El salto en
+  "solo clase de prueba" (13 → 20) sugiere mayor captación de nuevos leads vía clase gratuita en mayo, que aún no
+  se convierten en practicantes regulares.
+</div>
+
+<div class="note-box">
+  <strong>Cómo leer este resumen:</strong> Mayo 2026 es el último mes <em>cerrado</em> con datos completos —
+  por eso es la referencia de "mes del reporte". Junio 2026 (en curso) se muestra abajo como vista preliminar.
+  El KPI 4 (conversión clase prueba) es una métrica acumulada histórica de toda la base, no se recalcula por mes.
+</div>
+
+<div class="note-box">
+  <strong>⚙️ Corrección de metodología — "Promedio alumnos/clase":</strong> a partir de este reporte, este indicador
+  se calcula <strong>solo con clases grupales de yoga</strong> (Hatha, Vinyasa, Yoga Suave, Meditación, etc.).
+  Antes incluía también las sesiones individuales de Ayurveda (masajes, terapias, limpieza nasal, consultas), que
+  siempre tienen <strong>1 solo alumno</strong> y "diluían" el promedio real de las clases.
+  Ejemplo concreto: en mayo, <strong>Esteban Gauna</strong> tuvo 20 clases grupales con un promedio real de
+  <strong>7.4 alumnos/clase</strong>, pero también dictó 15 sesiones individuales de masajes/terapias (1 alumno c/u).
+  Mezclando ambas cosas, el promedio bajaba artificialmente a 4.7. Las terapias y masajes son <strong>otra área del
+  negocio (Ayurveda)</strong> y desde ahora se reportan por separado, sin afectar este KPI.
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SECCIÓN 2 — JUNIO EN CURSO (VISTA PRELIMINAR)
+═══════════════════════════════════════════════════════════ -->
+<div class="sec">🔴 Junio 2026 — En curso (día 9 de 30)
+  <span class="src-badge src-combo">Vista preliminar · datos parciales</span>
+</div>
+<div class="kpi-grid">
+  <div class="kpi blue">
+    <div class="kpi-lbl">KPI 1 · Nuevos inscrit@s (parcial)</div>
+    <div class="kpi-val">4</div>
+    <div class="kpi-sub">Mayo cerró con 15 — proyección al ritmo actual: ~13</div>
+  </div>
+  <div class="kpi blue">
+    <div class="kpi-lbl">KPI 2 · Prospectos últimos 7 días</div>
+    <div class="kpi-val">19</div>
+    <div class="kpi-sub">Mayo completo tuvo 66 (≈16/semana)</div>
+  </div>
+  <div class="kpi danger">
+    <div class="kpi-lbl">Leads fríos (al corte)</div>
+    <div class="kpi-val">194</div>
+    <div class="kpi-sub"><span class="down">▲ +14</span> vs cierre de mayo (180)</div>
+  </div>
+  <div class="kpi success">
+    <div class="kpi-lbl">Sesiones dictadas (9 días)</div>
+    <div class="kpi-val">68</div>
+    <div class="kpi-sub">Promedio alumnos: 4.5 · cancelación: 7.2%</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SECCIÓN 3 — CANAL DE CAPTACIÓN
+═══════════════════════════════════════════════════════════ -->
+<div class="sec">Canal de Captación
+  <span class="src-badge src-notion">Notion CRM · base activa (226 leads en pipeline + inscritos)</span>
+</div>
+<div class="chart-grid">
+  <div class="chart-card">
+    <h3>🌱 Orgánico vs Publicidad (todos los activos)</h3>
+    <div class="chart-wrap"><canvas id="cOrganico"></canvas></div>
+  </div>
+  <div class="chart-card">
+    <h3>📞 Vía de contacto (todos los activos)</h3>
+    <div class="chart-wrap"><canvas id="cVia"></canvas></div>
+  </div>
+  <div class="chart-card">
+    <h3>🎯 Embudo de captación</h3>
+    <div class="chart-wrap"><canvas id="cEmbudo"></canvas></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SECCIÓN 4 — DATOS FALTANTES
+═══════════════════════════════════════════════════════════ -->
+<div class="sec">⚠️ Datos Faltantes — Acción Requerida
+  <span class="src-badge src-notion">Notion CRM</span>
+</div>
+<div class="kpi-grid">
+  <div class="kpi warn">
+    <div class="kpi-lbl">Sin Fecha de Inscripción</div>
+    <div class="kpi-val">36</div>
+    <div class="kpi-sub">Inscrit@s sin fecha → KPI 1 subestimado</div>
+  </div>
+  <div class="kpi warn">
+    <div class="kpi-lbl">Sin Vía de Contacto</div>
+    <div class="kpi-val">218</div>
+    <div class="kpi-sub">De 226 activos en pipeline + inscritos</div>
+  </div>
+  <div class="kpi warn">
+    <div class="kpi-lbl">Sin Orgánico/Publicidad</div>
+    <div class="kpi-val">132</div>
+    <div class="kpi-sub">KPI 3 incompleto</div>
+  </div>
+  <div class="kpi danger">
+    <div class="kpi-lbl">Sin ningún canal registrado</div>
+    <div class="kpi-val">105</div>
+    <div class="kpi-sub">Canal de origen no trazable</div>
+  </div>
+</div>
+<div class="alert-box">
+  <strong>Cómo completar:</strong> abrir <code>dhatri_kpi_report.xlsx</code> → hoja "Datos Faltantes" — cada fila tiene
+  link directo al registro en Notion. Priorizar <strong>Fecha de Inscripción</strong> y luego <strong>Vía de Contacto</strong>
+  (campo con mayor cantidad de vacíos: 218 de 226).
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SECCIÓN 5 — RANKING DE PROFES (MAYO 2026)
+═══════════════════════════════════════════════════════════ -->
+<div class="sec">🏆 Ranking de Profes — Mayo 2026
+  <span class="src-badge src-wix">Wix Bookings · mes completo, 120 clases grupales (sin terapias/masajes)</span>
+</div>
+
+<div class="tcard" style="margin-bottom:18px">
+  <div class="tcard-head">
+    Evaluación por Profesor/a — Mayo 2026
+    <span class="badge" id="rankingCount"></span>
+  </div>
+  <div style="overflow-x:auto">
+  <table>
+    <thead>
+      <tr>
+        <th style="width:36px">#</th>
+        <th>Profe</th>
+        <th style="text-align:center">Clases<br>grupales</th>
+        <th style="text-align:center">Reservas</th>
+        <th style="min-width:140px">Promedio alumnos/clase<br><span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:10px;color:#aaa">(global mayo: 5.9)</span></th>
+        <th style="text-align:center">Índice<br>llenado</th>
+      </tr>
+    </thead>
+    <tbody id="rankingBody"></tbody>
+  </table>
+  </div>
+  <div class="alert-box" style="margin:12px 16px">
+    <strong>Índice de llenado</strong> = promedio de alumnos del profe en mayo ÷ promedio global de mayo (5.9) × 100.
+    Un índice ≥ 100% indica que ese profe tiene más alumnos por clase que la media del estudio ese mes.
+    Calculado solo sobre clases grupales de yoga; las sesiones individuales de Ayurveda (masajes, terapias) no se
+    incluyen en este cálculo.
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SECCIÓN 5B — FIDELIZACIÓN POR PROFESOR
+═══════════════════════════════════════════════════════════ -->
+<div class="sec">💚 Fidelización por Profesor — Alumnos que repiten
+  <span class="src-badge src-wix">Wix Bookings · clases grupales, mar-may 2026 (3 meses)</span>
+</div>
+
+<div class="tcard" style="margin-bottom:18px">
+  <div class="tcard-head">
+    Alumnos recurrentes por profesor/a
+    <span class="badge">ventana: mar-may 2026</span>
+  </div>
+  <div style="overflow-x:auto">
+  <table>
+    <thead>
+      <tr>
+        <th>Profe</th>
+        <th style="text-align:center">Alumnos<br>únicos</th>
+        <th style="text-align:center">Recurrentes<br>(≥3 sesiones)</th>
+        <th style="min-width:160px">Tasa de fidelización</th>
+        <th style="text-align:center">Sesiones<br>prom./alumno</th>
+      </tr>
+    </thead>
+    <tbody id="fidelizacionBody"></tbody>
+  </table>
+  </div>
+  <div class="note-box" style="margin:12px 16px">
+    <strong>¿Cómo se calcula?</strong> Para cada profe se cuentan los alumnos distintos (CI únicos) que tomaron al
+    menos una clase grupal con esa persona entre marzo y mayo 2026. La <strong>tasa de fidelización</strong> es el
+    % de esos alumnos que volvieron <strong>3 veces o más</strong> con el mismo profe en esos 3 meses — es decir,
+    alumnos que "siguen con el profesor" y no solo prueban una vez. "Sesiones prom./alumno" es el promedio de
+    clases tomadas por cada alumno único (incluye a los que vinieron solo 1 vez). Igual que el resto del reporte,
+    se excluyen masajes y terapias (Ayurveda).
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SECCIÓN 6 — PERFILES DE PROFES (12 MESES)
+═══════════════════════════════════════════════════════════ -->
+<div class="sec">📈 Perfiles de Profes — Evolución 12 meses
+  <span class="src-badge src-wix">Wix Bookings · jun-2025 a may-2026</span>
+</div>
+
+<div class="chart-grid">
+  <div class="chart-card" style="grid-column:span 2">
+    <h3>👥 Promedio de alumnos por clase — top 6 profes (12 meses)</h3>
+    <div class="chart-wrap xtall"><canvas id="cEvolucion"></canvas></div>
+  </div>
+</div>
+
+<div class="tcard" style="margin:18px 0">
+  <div class="tcard-head">
+    Tabla de evaluación — historial 12 meses
+    <span class="badge muted">jun-2025 → may-2026</span>
+  </div>
+  <div style="overflow-x:auto">
+  <table>
+    <thead>
+      <tr>
+        <th>Profe</th>
+        <th style="text-align:center">Meses<br>activo</th>
+        <th style="text-align:center">Clases<br>totales (12m)</th>
+        <th style="text-align:center">Promedio<br>histórico</th>
+        <th style="text-align:center">Promedio<br>últ. 3 meses</th>
+        <th style="text-align:center">Tendencia</th>
+        <th style="text-align:center">Índice llenado<br>(mayo 2026)</th>
+      </tr>
+    </thead>
+    <tbody id="profileBody"></tbody>
+  </table>
+  </div>
+  <div class="note-box" style="margin:12px 16px">
+    <strong>Tendencia</strong> compara el promedio de alumnos de los últimos 3 meses (mar-may 2026) contra los 3 meses
+    previos (dic-feb). <span class="trend-up">↑ Subiendo</span> = mejora &gt; +0.3 alumnos,
+    <span class="trend-down">↓ Bajando</span> = caída &gt; -0.3, <span class="trend-flat">→ Estable</span> = sin cambio relevante.
+  </div>
+</div>
+
+<div class="tcard" style="margin-bottom:18px">
+  <div class="tcard-head">
+    Profes nuevos — sin historial de 12 meses
+    <span class="badge warn">datos insuficientes</span>
+  </div>
+  <div style="overflow-x:auto">
+  <table>
+    <thead><tr><th>Profe</th><th style="text-align:center">Meses con datos</th><th style="text-align:center">Clases registradas</th><th style="text-align:center">Promedio alumnos</th><th>Nota</th></tr></thead>
+    <tbody id="newTeacherBody"></tbody>
+  </table>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SECCIÓN 7 — TENDENCIAS GENERALES (12 MESES)
+═══════════════════════════════════════════════════════════ -->
+<div class="sec">📊 Tendencias Generales — 12 meses
+  <span class="src-badge src-combo">Wix + Notion</span>
+</div>
+<div class="chart-grid">
+  <div class="chart-card">
+    <h3>🆕 KPI 1 — Nuevos inscrit@s por mes</h3>
+    <div class="chart-wrap"><canvas id="cKpi1"></canvas></div>
+  </div>
+  <div class="chart-card">
+    <h3>📐 Ocupación promedio vs cancelación</h3>
+    <div class="chart-wrap"><canvas id="cOcupacion"></canvas></div>
+  </div>
+</div>
+
+</div><!-- /container -->
+
+<footer>
+  Dashboard Dhatri Clases · Datos Wix Bookings (12 meses) + Notion CRM ·
+  Generado el <span id="footerFecha"></span> ·
+  <strong style="color:var(--primary)">Próxima actualización: ejecutar dhatri_kpi_report.py</strong>
+</footer>
+
+<script>
+// ═══════════════════════════════════════════════════════════
+// DATOS BASE — 13 meses (jun-2025 a jun-2026, el último parcial)
+// ═══════════════════════════════════════════════════════════
+const MONTHS = ['2025-06','2025-07','2025-08','2025-09','2025-10','2025-11','2025-12','2026-01','2026-02','2026-03','2026-04','2026-05','2026-06'];
+const MONTH_LABELS = ['Jun-25','Jul-25','Ago-25','Sep-25','Oct-25','Nov-25','Dic-25','Ene-26','Feb-26','Mar-26','Abr-26','May-26','Jun-26*'];
+const LAST_FULL = 11; // índice de mayo-2026 (último mes cerrado)
+
+// Datos SOLO de clases grupales de yoga (excluye masajes/terapias 1-a-1,
+// que siempre cuentan "1 alumno" y distorsionaban el promedio — ver nota más abajo)
+const GLOBAL = {
+  sessions:   [145,142,127,131,135,124,129,136,116,116,123,120,49],
+  avg:        [4.8,4.9,5.7,5.1,5.4,5.8,5.1,4.9,5.4,6.3,5.8,5.9,5.7],
+  cancelRate: [9.4,8.0,10.3,9.2,7.2,7.2,8.6,4.0,4.5,3.8,10.6,10.0,7.2],
+};
+
+const KPI1_TREND = [17,25,17,9,22,12,9,8,11,16,13,15,4]; // nuevos inscrit@s por mes (Notion)
+
+const TEACHERS = {
+  'Gita': {
+    sessions:[28,29,21,21,21,21,19,14,18,19,15,15,6],
+    avg:[5.1,4.0,5.7,5.7,6.1,6.7,5.8,6.1,7.5,8.2,5.3,5.9,7.2],
+    indiv:[12,25,20,17,14,27,19,12,19,11,10,21,6]
+  },
+  'Esteban Gauna': {
+    sessions:[25,31,26,25,25,24,26,30,18,26,23,20,7],
+    avg:[4.7,4.5,6.9,6.6,7.0,7.5,5.9,4.6,4.1,5.7,5.8,7.4,7.7],
+    indiv:[15,28,29,13,22,16,21,12,7,4,16,15,6]
+  },
+  'Nicolás Ibarra': {
+    sessions:[11,10,9,14,13,10,15,19,14,14,12,13,6],
+    avg:[4.6,3.6,4.6,4.7,6.2,6.7,5.9,5.4,4.8,5.9,6.8,4.7,3.3],
+    indiv:[0,8,3,8,9,6,9,9,12,5,8,16,3]
+  },
+  'Consuelo Silva': {
+    sessions:[3,4,3,3,4,3,3,5,5,4,8,7,4],
+    avg:[2.0,3.0,2.3,3.0,3.5,7.0,2.7,6.2,5.4,6.8,9.9,13.7,12.3],
+    indiv:[19,26,14,14,19,12,23,17,25,38,38,35,17]
+  },
+  'Vishvanath (Diego Maldonado)': {
+    sessions:[9,9,5,10,8,8,9,11,17,11,10,11,6],
+    avg:[4.2,3.8,5.0,3.5,4.6,4.5,4.8,3.6,4.3,6.2,4.7,4.6,4.2],
+    indiv:[3,5,2,0,0,6,2,0,0,0,0,0,0]
+  },
+  'César Lillo': {
+    sessions:[8,8,8,4,5,4,3,4,3,4,10,10,4],
+    avg:[3.3,3.9,3.3,3.5,5.4,4.5,5.3,6.0,6.0,5.5,3.5,4.1,3.8],
+    indiv:[0,0,0,0,0,0,0,0,0,0,0,0,0]
+  },
+  'Catalina Suckel': {
+    sessions:[null,null,null,3,4,4,7,5,11,8,12,9,1],
+    avg:[null,null,null,4.0,4.8,5.5,6.0,7.0,5.1,6.0,6.7,3.2,3.0],
+    indiv:[0,0,0,0,0,0,0,0,0,0,0,0,0]
+  },
+  'Melissa Guajardo': {
+    sessions:[16,19,15,14,14,13,14,17,13,11,10,9,null],
+    avg:[6.3,6.9,8.2,6.6,6.1,5.8,3.9,5.0,5.9,6.0,5.3,5.9,null],
+    indiv:[0,0,0,0,0,0,0,0,0,0,0,0,0]
+  },
+  'Constanza Aguayo': {
+    sessions:[8,9,8,8,7,8,7,7,6,5,6,8,4],
+    avg:[8.6,7.3,7.6,6.9,7.4,7.1,6.9,8.9,8.7,11.0,11.5,9.3,8.3],
+    indiv:[0,0,0,0,0,0,0,0,0,0,0,0,0]
+  },
+  'Constanza Muñoz': {
+    sessions:[8,8,8,8,9,8,10,8,6,7,4,4,1],
+    avg:[4.1,6.1,5.6,5.3,5.9,7.3,7.0,5.8,5.2,6.1,10.3,9.0,11.0],
+    indiv:[0,0,0,0,0,0,1,0,0,1,0,0,0]
+  },
+  'Paulina Osorio': {
+    sessions:[5,1,3,5,6,3,4,8,1,2,6,4,2],
+    avg:[1,1,1.3,1,1,1.3,1,1.1,1,1,1,1,1],
+    indiv:[0,0,0,0,0,0,0,0,0,0,0,0,0]
+  },
+};
+
+const NEW_TEACHERS = [
+  { name:'Katha Villar',      sessions:[4,3,1], avg:[3.3,3.7,4.0], nota:'Activa desde abril 2026 (3 meses de datos)' },
+  { name:'Constanza Torres',  sessions:[4,4,5], avg:[2.8,2.3,3.4], nota:'Activa desde abril 2026 (3 meses de datos)' },
+];
+
+// Fidelización (alumnos recurrentes) — clases grupales, confirmadas, mar-may 2026
+const FIDELIZACION = {
+  'Constanza Muñoz':              { unicos:33, recurrentes:18, promedioSesiones:3.4 },
+  'Consuelo Silva':                { unicos:51, recurrentes:24, promedioSesiones:3.8 },
+  'Gita':                          { unicos:77, recurrentes:35, promedioSesiones:3.9 },
+  'Esteban Gauna':                 { unicos:79, recurrentes:35, promedioSesiones:4.8 },
+  'Vishvanath (Diego Maldonado)':  { unicos:46, recurrentes:19, promedioSesiones:3.3 },
+  'Constanza Aguayo':              { unicos:62, recurrentes:24, promedioSesiones:3.0 },
+  'César Lillo':                   { unicos:26, recurrentes:10, promedioSesiones:3.5 },
+  'Catalina Suckel':               { unicos:54, recurrentes:19, promedioSesiones:2.6 },
+  'Melissa Guajardo':              { unicos:60, recurrentes:21, promedioSesiones:2.8 },
+  'Nicolás Ibarra':                { unicos:77, recurrentes:23, promedioSesiones:2.8 },
+  'Katha Villar':                  { unicos:14, recurrentes:4,  promedioSesiones:2.5 },
+  'Constanza Torres':              { unicos:14, recurrentes:1,  promedioSesiones:1.3 },
+};
+
+// ═══════════════════════════════════════════════════════════
+// FECHA
+// ═══════════════════════════════════════════════════════════
+const now = new Date();
+const fmtDate = d => d.toLocaleDateString('es-CL',{day:'2-digit',month:'long',year:'numeric'});
+document.getElementById('fechaHdr').textContent   = fmtDate(now);
+document.getElementById('footerFecha').textContent = fmtDate(now);
+
+// ═══════════════════════════════════════════════════════════
+// PALETA
+// ═══════════════════════════════════════════════════════════
+const P = ['#2e5c3e','#4a7c59','#7faf9e','#c9a96e','#1B4F91','#534AB7','#e8a840','#c0392b','#a3c4bc'];
+
+// ═══════════════════════════════════════════════════════════
+// RANKING MAYO 2026 (último mes cerrado, índice 11)
+// ═══════════════════════════════════════════════════════════
+function buildRankingMayo() {
+  const rows = [];
+  for (const [name, t] of Object.entries(TEACHERS)) {
+    const sessions = t.sessions[LAST_FULL];
+    const avg = t.avg[LAST_FULL];
+    if (sessions == null) continue;
+    rows.push({ name, sessions, avg, bookings: Math.round(sessions*avg) });
+  }
+  for (const t of NEW_TEACHERS) {
+    rows.push({ name: t.name, sessions: t.sessions[1], avg: t.avg[1], bookings: Math.round(t.sessions[1]*t.avg[1]) });
+  }
+  rows.sort((a,b) => b.sessions - a.sessions);
+  return rows;
+}
+
+function fillRanking() {
+  const GLOBAL_AVG = GLOBAL.avg[LAST_FULL]; // 5.9 (solo clases grupales)
+  const ranking = buildRankingMayo();
+  document.getElementById('rankingCount').textContent = `${ranking.length} profes activos`;
+  const tb = document.getElementById('rankingBody');
+  ranking.forEach((r, i) => {
+    const pos = i + 1;
+    const fillRate = Math.round(r.avg / GLOBAL_AVG * 100);
+    const cls = fillRate >= 100 ? 'good' : fillRate >= 75 ? 'medium' : 'low';
+    const barW = Math.min(fillRate, 1.6) * 80;
+    const numCls = pos <= 3 ? `rank-num rank-${pos}` : 'rank-num';
+    const fiColor = cls==='good'?'var(--success)':cls==='medium'?'var(--warn)':'var(--danger)';
+
+    tb.innerHTML += `
+      <tr>
+        <td><span class="${numCls}">${pos}</span></td>
+        <td><strong>${r.name}</strong></td>
+        <td style="text-align:center;font-weight:700">${r.sessions}</td>
+        <td style="text-align:center">${r.bookings}</td>
+        <td>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="font-weight:700;font-size:15px;min-width:32px">${r.avg}</span>
+            <div class="fill-bar" style="flex:1">
+              <div class="fill-bar-inner ${cls}" style="width:${barW}px"></div>
+            </div>
+          </div>
+        </td>
+        <td style="text-align:center">
+          <span style="font-size:13px;color:${fiColor};font-weight:700">${fillRate}%</span>
+        </td>
+      </tr>`;
+  });
+}
+fillRanking();
+
+// ═══════════════════════════════════════════════════════════
+// FIDELIZACIÓN POR PROFESOR (mar-may 2026)
+// ═══════════════════════════════════════════════════════════
+function fillFidelizacion() {
+  const tb = document.getElementById('fidelizacionBody');
+  const rows = Object.entries(FIDELIZACION).map(([name, f]) => ({
+    name,
+    unicos: f.unicos,
+    recurrentes: f.recurrentes,
+    rate: Math.round(f.recurrentes / f.unicos * 100),
+    promedioSesiones: f.promedioSesiones,
+  }));
+  rows.sort((a,b) => b.rate - a.rate);
+
+  rows.forEach(r => {
+    const cls = r.rate >= 45 ? 'good' : r.rate >= 30 ? 'medium' : 'low';
+    const color = cls==='good'?'var(--success)':cls==='medium'?'var(--warn)':'var(--danger)';
+    const barW = Math.min(r.rate, 100) * 1.6;
+    tb.innerHTML += `
+      <tr>
+        <td><strong>${r.name}</strong></td>
+        <td style="text-align:center;font-weight:700">${r.unicos}</td>
+        <td style="text-align:center">${r.recurrentes}</td>
+        <td>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="font-weight:700;font-size:14px;min-width:38px;color:${color}">${r.rate}%</span>
+            <div class="fill-bar" style="flex:1">
+              <div class="fill-bar-inner ${cls}" style="width:${barW}px"></div>
+            </div>
+          </div>
+        </td>
+        <td style="text-align:center">${r.promedioSesiones.toFixed(1)}</td>
+      </tr>`;
+  });
+}
+fillFidelizacion();
+
+// ═══════════════════════════════════════════════════════════
+// TABLA DE PERFILES — 12 MESES
+// ═══════════════════════════════════════════════════════════
+function avgOf(arr) {
+  const vals = arr.filter(v => v != null);
+  if (!vals.length) return null;
+  return vals.reduce((a,b)=>a+b,0) / vals.length;
+}
+
+function fillProfiles() {
+  const GLOBAL_AVG_MAY = GLOBAL.avg[LAST_FULL];
+  const tb = document.getElementById('profileBody');
+
+  const rows = Object.entries(TEACHERS).map(([name, t]) => {
+    const sessions12 = t.sessions.slice(0, LAST_FULL+1);
+    const avg12      = t.avg.slice(0, LAST_FULL+1);
+    const mesesActivo = sessions12.filter(v => v != null).length;
+    const totalClases = sessions12.reduce((a,b)=>a+(b||0), 0);
+    const histAvg  = avgOf(avg12);
+    const ult3     = avgOf(avg12.slice(9, 12));   // mar, abr, may
+    const prev3    = avgOf(avg12.slice(6, 9));    // dic, ene, feb
+    const fillIdx  = avg12[LAST_FULL] != null ? Math.round(avg12[LAST_FULL] / GLOBAL_AVG_MAY * 100) : null;
+
+    let trend = 'flat', trendLabel = '→ Estable';
+    if (ult3 != null && prev3 != null) {
+      const diff = ult3 - prev3;
+      if (diff > 0.3) { trend = 'up'; trendLabel = `↑ Subiendo (+${diff.toFixed(1)})`; }
+      else if (diff < -0.3) { trend = 'down'; trendLabel = `↓ Bajando (${diff.toFixed(1)})`; }
+      else { trendLabel = `→ Estable (${diff>=0?'+':''}${diff.toFixed(1)})`; }
+    }
+
+    return { name, mesesActivo, totalClases, histAvg, ult3, fillIdx, trend, trendLabel };
+  });
+
+  rows.sort((a,b) => b.totalClases - a.totalClases);
+
+  rows.forEach(r => {
+    const fiColor = r.fillIdx == null ? 'var(--muted)' : r.fillIdx>=100?'var(--success)':r.fillIdx>=75?'var(--warn)':'var(--danger)';
+    const trendCls = r.trend === 'up' ? 'trend-up' : r.trend === 'down' ? 'trend-down' : 'trend-flat';
+    tb.innerHTML += `
+      <tr>
+        <td><strong>${r.name}</strong></td>
+        <td style="text-align:center">${r.mesesActivo}/12</td>
+        <td style="text-align:center;font-weight:700">${r.totalClases}</td>
+        <td style="text-align:center">${r.histAvg != null ? r.histAvg.toFixed(1) : '—'}</td>
+        <td style="text-align:center;font-weight:700">${r.ult3 != null ? r.ult3.toFixed(1) : '—'}</td>
+        <td style="text-align:center" class="${trendCls}">${r.trendLabel}</td>
+        <td style="text-align:center"><span style="font-weight:700;color:${fiColor}">${r.fillIdx != null ? r.fillIdx+'%' : '—'}</span></td>
+      </tr>`;
+  });
+
+  // Profes nuevos
+  const ntb = document.getElementById('newTeacherBody');
+  NEW_TEACHERS.forEach(t => {
+    const totalClases = t.sessions.reduce((a,b)=>a+b,0);
+    const avgHist = avgOf(t.avg);
+    ntb.innerHTML += `
+      <tr>
+        <td><strong>${t.name}</strong></td>
+        <td style="text-align:center">${t.sessions.length}</td>
+        <td style="text-align:center;font-weight:700">${totalClases}</td>
+        <td style="text-align:center">${avgHist.toFixed(1)}</td>
+        <td style="font-size:11px;color:var(--muted)">${t.nota}</td>
+      </tr>`;
+  });
+}
+fillProfiles();
+
+// ═══════════════════════════════════════════════════════════
+// GRÁFICOS
+// ═══════════════════════════════════════════════════════════
+const baseOpts = {
+  responsive:true, maintainAspectRatio:false,
+  plugins:{ legend:{ display:false } }
+};
+
+// Evolución 12 meses — top 6 profes por clases totales
+const TOP6 = Object.entries(TEACHERS)
+  .map(([name,t]) => ({ name, total: t.sessions.slice(0,LAST_FULL+1).reduce((a,b)=>a+(b||0),0), t }))
+  .sort((a,b)=>b.total-a.total)
+  .slice(0,6);
+
+new Chart(document.getElementById('cEvolucion'), {
+  type:'line',
+  data:{
+    labels: MONTH_LABELS,
+    datasets:[
+      ...TOP6.map((r,i) => ({
+        label: r.name,
+        data: r.t.avg,
+        borderColor: P[i%P.length],
+        backgroundColor: P[i%P.length],
+        spanGaps:true,
+        tension:.3,
+        pointRadius:3,
+      })),
+      {
+        label:'Promedio global',
+        data: GLOBAL.avg,
+        borderColor:'#999',
+        borderDash:[6,3],
+        borderWidth:2,
+        pointRadius:0,
+        fill:false,
+      }
+    ]
+  },
+  options:{
+    ...baseOpts,
+    plugins:{ legend:{ display:true, position:'bottom', labels:{font:{size:10},boxWidth:12} } },
+    scales:{
+      x:{ grid:{display:false}, ticks:{font:{size:10}} },
+      y:{ grid:{color:'#eee'}, beginAtZero:true, ticks:{font:{size:11}} }
+    }
+  }
+});
+
+// KPI1 mensual (bar)
+new Chart(document.getElementById('cKpi1'), {
+  type:'bar',
+  data:{
+    labels: MONTH_LABELS,
+    datasets:[{
+      label:'Nuevos inscrit@s',
+      data: KPI1_TREND,
+      backgroundColor: P[0],
+      borderRadius:6
+    }]
+  },
+  options:{
+    ...baseOpts,
+    scales:{
+      x:{ grid:{display:false}, ticks:{font:{size:10}} },
+      y:{ grid:{color:'#eee'}, beginAtZero:true, ticks:{font:{size:11}} }
+    }
+  }
+});
+
+// Ocupación promedio (línea) vs cancelación (línea, eje secundario)
+new Chart(document.getElementById('cOcupacion'), {
+  type:'line',
+  data:{
+    labels: MONTH_LABELS,
+    datasets:[
+      {
+        label:'Promedio alumnos/clase',
+        data: GLOBAL.avg,
+        borderColor: '#2e5c3e',
+        backgroundColor: '#2e5c3e',
+        tension:.3,
+        yAxisID:'y',
+      },
+      {
+        label:'Tasa cancelación %',
+        data: GLOBAL.cancelRate,
+        borderColor: '#c0392b',
+        backgroundColor: '#c0392b',
+        borderDash:[5,3],
+        tension:.3,
+        yAxisID:'y1',
+      }
+    ]
+  },
+  options:{
+    ...baseOpts,
+    plugins:{ legend:{ display:true, position:'bottom', labels:{font:{size:11},boxWidth:12} } },
+    scales:{
+      x:{ grid:{display:false}, ticks:{font:{size:10}} },
+      y:{ position:'left', grid:{color:'#eee'}, beginAtZero:true, title:{display:true,text:'Alumnos/clase',font:{size:10}} },
+      y1:{ position:'right', grid:{display:false}, beginAtZero:true, max:15, title:{display:true,text:'% cancelación',font:{size:10}} },
+    }
+  }
+});
+
+// Orgánico/Publicidad (donut)
+new Chart(document.getElementById('cOrganico'), {
+  type:'doughnut',
+  data:{
+    labels: ['Orgánico (249)','Publicidad (143)','Sin dato (132)','Convenio (4)','Flyer (2)'],
+    datasets:[{
+      data: [249,143,132,4,2],
+      backgroundColor:['#2e5c3e','#c9a96e','#c0392b','#1B4F91','#534AB7'],
+      borderWidth:0,
+      hoverOffset:6
+    }]
+  },
+  options:{
+    ...baseOpts,
+    plugins:{ legend:{ display:true, position:'bottom', labels:{font:{size:10},boxWidth:12} } },
+    cutout:'60%'
+  }
+});
+
+// Vía de contacto (donut)
+new Chart(document.getElementById('cVia'), {
+  type:'doughnut',
+  data:{
+    labels: ['Whatsapp (193)','Sin dato (218)','Escuela (102)','Instagram (10)','Web (3)','Google (2)'],
+    datasets:[{
+      data: [193,218,102,10,3,2],
+      backgroundColor:['#1B4F91','#c0392b','#4a7c59','#534AB7','#c9a96e','#a3c4bc'],
+      borderWidth:0,
+      hoverOffset:6
+    }]
+  },
+  options:{
+    ...baseOpts,
+    plugins:{ legend:{ display:true, position:'bottom', labels:{font:{size:10},boxWidth:12} } },
+    cutout:'60%'
+  }
+});
+
+// Embudo captación (bar horizontal)
+new Chart(document.getElementById('cEmbudo'), {
+  type:'bar',
+  data:{
+    labels:['Total registros','Pipeline activo','Tomaron clase prueba','Se inscribieron','Leads fríos'],
+    datasets:[{
+      label:'Personas',
+      data:[1134, 226, 110, 76, 180],
+      backgroundColor:['#2e5c3e','#4a7c59','#c9a96e','#1B4F91','#c0392b'],
+      borderRadius:6
+    }]
+  },
+  options:{
+    ...baseOpts,
+    indexAxis:'y',
+    scales:{
+      x:{ grid:{color:'#eee'}, ticks:{font:{size:10}} },
+      y:{ grid:{display:false}, ticks:{font:{size:11}} }
+    }
+  }
+});
+
+</script>
+</body>
+</html>
