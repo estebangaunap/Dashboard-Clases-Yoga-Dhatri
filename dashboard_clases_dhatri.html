@@ -343,7 +343,7 @@ footer{
 <div class="kpi-grid">
   <div class="kpi warn">
     <div class="kpi-lbl">Sin Fecha de Inscripción</div>
-    <div class="kpi-val">36</div>
+    <div class="kpi-val">34</div>
     <div class="kpi-sub">Inscrit@s sin fecha → KPI 1 subestimado</div>
   </div>
   <div class="kpi warn">
@@ -366,6 +366,49 @@ footer{
   <strong>Cómo completar:</strong> abrir <code>dhatri_kpi_report.xlsx</code> → hoja "Datos Faltantes" — cada fila tiene
   link directo al registro en Notion. Priorizar <strong>Fecha de Inscripción</strong> y luego <strong>Vía de Contacto</strong>
   (campo con mayor cantidad de vacíos: 218 de 226).
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SECCIÓN 4b — DESERCIONES (Notion CRM)
+═══════════════════════════════════════════════════════════ -->
+<div class="sec">🚪 Deserciones — Ventana 13 meses
+  <span class="src-badge src-notion">Notion CRM · Estado = "Desertó"</span>
+</div>
+<div class="kpi-grid">
+  <div class="kpi danger">
+    <div class="kpi-lbl">Total deserciones registradas</div>
+    <div class="kpi-val">12</div>
+    <div class="kpi-sub">Histórico completo · 6 pre-ventana (antes de jun-25)</div>
+  </div>
+  <div class="kpi warn">
+    <div class="kpi-lbl">Sin "Fecha deserción/Pausa"</div>
+    <div class="kpi-val">9</div>
+    <div class="kpi-sub">9 de 12 usan última edición como proxy de fecha</div>
+  </div>
+  <div class="kpi">
+    <div class="kpi-lbl">Sede con más deserciones</div>
+    <div class="kpi-val" style="font-size:26px">Las Condes</div>
+    <div class="kpi-sub">7 deserciones · Providencia: 3 · Sin sede: 2</div>
+  </div>
+  <div class="kpi success">
+    <div class="kpi-lbl">Tasa deserción histórica</div>
+    <div class="kpi-val">3.8%</div>
+    <div class="kpi-sub">12 desertadas / 312 total (300 activas + 12 desertadas)</div>
+  </div>
+</div>
+<div class="chart-grid">
+  <div class="chart-card" style="grid-column:1/-1">
+    <h3>📉 Nuevos inscrit@s vs Deserciones — mes a mes</h3>
+    <div class="chart-wrap"><canvas id="cDeserciones"></canvas></div>
+  </div>
+</div>
+<div class="alert-box">
+  <strong>⚠️ Fechas aproximadas:</strong> 9 de 12 registros "Desertó" no tienen el campo
+  <strong>"Fecha deserción/Pausa"</strong> completado — el gráfico usa la fecha de última
+  edición del registro como proxy. Para mayor precisión, completar ese campo en Notion.<br>
+  <strong>Sin fecha:</strong> María Isleyer Tovar · Carolina Vázquez · Jeanette Vargas ·
+  Nicole Vallejos · Elisa Peralta · Danae Salbach · Florencia Olivos ·
+  Soledad Aragon Bradi · Valentina Petit.
 </div>
 
 <!-- ═══════════════════════════════════════════════════════════
@@ -536,6 +579,11 @@ const GLOBAL = {
 };
 
 const KPI1_TREND = [17,25,17,9,22,12,9,8,11,16,13,15,5]; // nuevos inscrit@s por mes (Notion)
+
+// Deserciones por mes — Notion Estado="Desertó" (12 registros totales)
+// Fecha deserción/Pausa cuando existe (3/12); resto usa última edición como proxy.
+// 6 deserciones pre-ventana (antes de jun-25) no mostradas.
+const DESERCIONES = [2,0,0,0,0,0,0,0,0,1,2,0,1]; // jun-25 → jun-26
 
 const TEACHERS = {
   'Gita': {
@@ -853,6 +901,47 @@ new Chart(document.getElementById('cKpi1'), {
     scales:{
       x:{ grid:{display:false}, ticks:{font:{size:10}} },
       y:{ grid:{color:'#eee'}, beginAtZero:true, ticks:{font:{size:11}} }
+    }
+  }
+});
+
+// Deserciones vs Nuevos inscrit@s (bar + línea combinados)
+new Chart(document.getElementById('cDeserciones'), {
+  type:'bar',
+  data:{
+    labels: MONTH_LABELS,
+    datasets:[
+      {
+        label:'Nuevos inscrit@s',
+        data: KPI1_TREND,
+        backgroundColor: 'rgba(46,92,62,0.75)',
+        borderColor: '#2e5c3e',
+        borderWidth: 1,
+        borderRadius: 5,
+        yAxisID:'y'
+      },
+      {
+        label:'Deserciones',
+        type:'line',
+        data: DESERCIONES,
+        borderColor:'#c0392b',
+        backgroundColor:'rgba(192,57,43,0.10)',
+        fill:true,
+        tension:0.35,
+        pointRadius:5,
+        pointBackgroundColor:'#c0392b',
+        borderWidth:2,
+        yAxisID:'y'
+      }
+    ]
+  },
+  options:{
+    ...baseOpts,
+    plugins:{ legend:{ display:true, position:'bottom', labels:{font:{size:11},boxWidth:12} } },
+    scales:{
+      x:{ grid:{display:false}, ticks:{font:{size:10}} },
+      y:{ grid:{color:'#eee'}, beginAtZero:true, ticks:{font:{size:11}},
+          title:{display:true,text:'Personas',font:{size:10}} }
     }
   }
 });
