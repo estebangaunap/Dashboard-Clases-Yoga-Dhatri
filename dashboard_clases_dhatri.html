@@ -369,27 +369,27 @@ footer{
 <!-- ═══════════════════════════════════════════════════════════
      SECCIÓN 4b — DESERCIONES (Notion CRM)
 ═══════════════════════════════════════════════════════════ -->
-<div class="sec">🚪 Deserciones — Ventana 13 meses
-  <span class="src-badge src-notion">Notion CRM · Estado = "Desertó"</span>
+<div class="sec">🚪 Bajas y Pausas — Ventana 13 meses
+  <span class="src-badge src-notion">Notion CRM · campo "Fecha deserción/Pausa"</span>
 </div>
 <div class="kpi-grid">
   <div class="kpi danger">
-    <div class="kpi-lbl">Total deserciones registradas</div>
-    <div class="kpi-val">17</div>
-    <div class="kpi-sub">Histórico completo · 8 pre-ventana (antes de jul-25)</div>
-  </div>
-  <div class="kpi warn">
-    <div class="kpi-lbl">Sin "Fecha deserción/Pausa"</div>
-    <div class="kpi-val">12</div>
-    <div class="kpi-sub">12 de 17 usan última edición como proxy de fecha</div>
-  </div>
-  <div class="kpi">
-    <div class="kpi-lbl">Sede con más deserciones</div>
-    <div class="kpi-val" style="font-size:26px">Las Condes</div>
-    <div class="kpi-sub">Pendiente actualizar · datos anteriores: LC 7 · Prov 3 · Sin sede 2</div>
+    <div class="kpi-lbl">Bajas/pausas en ventana (13m)</div>
+    <div class="kpi-val">63</div>
+    <div class="kpi-sub">Registros con "Fecha deserción/Pausa" en jul-25→jul-26</div>
   </div>
   <div class="kpi danger">
-    <div class="kpi-lbl">Tasa deserción histórica</div>
+    <div class="kpi-lbl">Deserciones permanentes</div>
+    <div class="kpi-val">17</div>
+    <div class="kpi-sub">Solo Estado = "Desertó" (confirmadas) · 8 pre-ventana</div>
+  </div>
+  <div class="kpi warn">
+    <div class="kpi-lbl">Estado a corregir (jun-26)</div>
+    <div class="kpi-val">7</div>
+    <div class="kpi-sub">Tienen fecha de baja en junio pero Estado = "Inscrit@" en Notion</div>
+  </div>
+  <div class="kpi danger">
+    <div class="kpi-lbl">Tasa deserción permanente</div>
     <div class="kpi-val">5.2%</div>
     <div class="kpi-sub">17 desertadas / 324 total (307 activas + 17 desertadas)</div>
   </div>
@@ -401,13 +401,12 @@ footer{
   </div>
 </div>
 <div class="alert-box">
-  <strong>⚠️ Fechas aproximadas:</strong> 12 de 17 registros "Desertó" no tienen el campo
-  <strong>"Fecha deserción/Pausa"</strong> completado — el gráfico usa la fecha de última
-  edición del registro como proxy. Para mayor precisión, completar ese campo en Notion.<br>
-  <strong>Afectan el gráfico (en ventana jul-25→jul-26, 6 sin fecha):</strong>
-  (sin nombre) · Carolina Vázquez · Jeanette Vargas · Cari Tusing · Valentina Reyes · Ulises Soto.<br>
-  <strong>Pre-ventana (6 sin fecha, no afectan el gráfico):</strong>
-  Nicole Vallejos · Elisa Peralta · Danae Salbach · Florencia Olivos · Soledad Aragon Bradi · Valentina Petit.
+  <strong>⚠️ El gráfico usa el campo "Fecha deserción/Pausa"</strong> como criterio (registra tanto pausas temporales como
+  deserciones permanentes). El total del gráfico (63 en ventana) incluye personas que pudieron haber vuelto.<br><br>
+  <strong>🔴 Corrección urgente en Notion — 7 registros de junio tienen fecha de baja pero Estado = "Inscrit@":</strong><br>
+  Martin Astesiano · María Luna · Claudia Rubilar · Maria José Durán Pinzón · Kateryna Pavluk ·
+  Caterina Bregante O'Ryan · María Nelly Liendo.<br>
+  Cambiar su Estado a <strong>"Desertó"</strong> o <strong>"Pausa"</strong> según corresponda en Notion.
 </div>
 
 <!-- ═══════════════════════════════════════════════════════════
@@ -579,10 +578,10 @@ const GLOBAL = {
 
 const KPI1_TREND = [25,17,9,22,12,9,8,11,16,13,15,13,2]; // nuevos inscrit@s por mes (Notion)
 
-// Deserciones por mes — Notion Estado="Desertó" (17 registros totales)
-// Fecha deserción/Pausa cuando existe (5/17); resto usa última edición como proxy.
-// 8 deserciones pre-ventana (antes de jul-25) no mostradas.
-const DESERCIONES = [0,0,0,0,0,0,0,0,1,2,0,5,1]; // jul-25 → jul-26
+// Bajas por mes — Notion campo "Fecha deserción/Pausa" (registra pausas + deserciones)
+// Criterio: cualquier registro con esa fecha completada, independiente del Estado actual.
+// Pre-ventana (antes de jul-25) no mostrados.
+const DESERCIONES = [5,9,8,6,9,3,2,0,3,5,3,9,1]; // jul-25 → jul-26
 
 const TEACHERS = {
   'Gita': {
