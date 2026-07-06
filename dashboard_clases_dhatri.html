@@ -375,23 +375,23 @@ footer{
 <div class="kpi-grid">
   <div class="kpi danger">
     <div class="kpi-lbl">Total deserciones registradas</div>
-    <div class="kpi-val">12</div>
-    <div class="kpi-sub">Histórico completo · 6 pre-ventana (antes de jun-25)</div>
+    <div class="kpi-val">17</div>
+    <div class="kpi-sub">Histórico completo · 8 pre-ventana (antes de jul-25)</div>
   </div>
   <div class="kpi warn">
     <div class="kpi-lbl">Sin "Fecha deserción/Pausa"</div>
-    <div class="kpi-val">9</div>
-    <div class="kpi-sub">9 de 12 usan última edición como proxy de fecha</div>
+    <div class="kpi-val">12</div>
+    <div class="kpi-sub">12 de 17 usan última edición como proxy de fecha</div>
   </div>
   <div class="kpi">
     <div class="kpi-lbl">Sede con más deserciones</div>
     <div class="kpi-val" style="font-size:26px">Las Condes</div>
-    <div class="kpi-sub">7 deserciones · Providencia: 3 · Sin sede: 2</div>
+    <div class="kpi-sub">Pendiente actualizar · datos anteriores: LC 7 · Prov 3 · Sin sede 2</div>
   </div>
-  <div class="kpi success">
+  <div class="kpi danger">
     <div class="kpi-lbl">Tasa deserción histórica</div>
-    <div class="kpi-val">3.8%</div>
-    <div class="kpi-sub">12 desertadas / 312 total (300 activas + 12 desertadas)</div>
+    <div class="kpi-val">5.2%</div>
+    <div class="kpi-sub">17 desertadas / 324 total (307 activas + 17 desertadas)</div>
   </div>
 </div>
 <div class="chart-grid">
@@ -401,12 +401,13 @@ footer{
   </div>
 </div>
 <div class="alert-box">
-  <strong>⚠️ Fechas aproximadas:</strong> 9 de 12 registros "Desertó" no tienen el campo
+  <strong>⚠️ Fechas aproximadas:</strong> 12 de 17 registros "Desertó" no tienen el campo
   <strong>"Fecha deserción/Pausa"</strong> completado — el gráfico usa la fecha de última
   edición del registro como proxy. Para mayor precisión, completar ese campo en Notion.<br>
-  <strong>Sin fecha:</strong> María Isleyer Tovar · Carolina Vázquez · Jeanette Vargas ·
-  Nicole Vallejos · Elisa Peralta · Danae Salbach · Florencia Olivos ·
-  Soledad Aragon Bradi · Valentina Petit.
+  <strong>Afectan el gráfico (en ventana jul-25→jul-26, 6 sin fecha):</strong>
+  (sin nombre) · Carolina Vázquez · Jeanette Vargas · Cari Tusing · Valentina Reyes · Ulises Soto.<br>
+  <strong>Pre-ventana (6 sin fecha, no afectan el gráfico):</strong>
+  Nicole Vallejos · Elisa Peralta · Danae Salbach · Florencia Olivos · Soledad Aragon Bradi · Valentina Petit.
 </div>
 
 <!-- ═══════════════════════════════════════════════════════════
@@ -578,10 +579,10 @@ const GLOBAL = {
 
 const KPI1_TREND = [25,17,9,22,12,9,8,11,16,13,15,13,2]; // nuevos inscrit@s por mes (Notion)
 
-// Deserciones por mes — Notion Estado="Desertó" (12 registros totales)
-// Fecha deserción/Pausa cuando existe (3/12); resto usa última edición como proxy.
-// 6 deserciones pre-ventana (antes de jul-25) no mostradas.
-const DESERCIONES = [0,0,0,0,0,0,0,0,1,2,0,1,0]; // jul-25 → jul-26
+// Deserciones por mes — Notion Estado="Desertó" (17 registros totales)
+// Fecha deserción/Pausa cuando existe (5/17); resto usa última edición como proxy.
+// 8 deserciones pre-ventana (antes de jul-25) no mostradas.
+const DESERCIONES = [0,0,0,0,0,0,0,0,1,2,0,5,1]; // jul-25 → jul-26
 
 const TEACHERS = {
   'Gita': {
