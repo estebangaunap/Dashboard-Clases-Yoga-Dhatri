@@ -174,8 +174,8 @@ footer{
 <!-- ═══════════════════════════════════════════════════════════
      SECCIÓN 1 — RESUMEN DEL MES (3 EJES) + COMPARACIÓN MES ANTERIOR
 ═══════════════════════════════════════════════════════════ -->
-<div class="sec">📅 Resumen del Mes — Julio 2026
-  <span class="src-badge src-combo">Notion + Wix · comparado con Junio 2026</span>
+<div class="sec">📅 Resumen del Mes — Agosto 2026
+  <span class="src-badge src-combo">Notion + Wix · comparado con Agosto 2026</span>
 </div>
 
 <div class="eje e1">Eje 1 · Captación</div>
@@ -266,8 +266,8 @@ footer{
 </div>
 
 <div class="note-box">
-  <strong>Cómo leer este resumen:</strong> Julio 2026 es el último mes <em>cerrado</em> con datos completos —
-  por eso es la referencia de "mes del reporte". Agosto 2026 (en curso) se muestra abajo como vista preliminar.
+  <strong>Cómo leer este resumen:</strong> Agosto 2026 es el último mes <em>cerrado</em> con datos completos —
+  por eso es la referencia de "mes del reporte". Septiembre 2026 (en curso) se muestra abajo como vista preliminar.
   El KPI 4 (conversión clase prueba) es una métrica acumulada histórica de toda la base, no se recalcula por mes.
 </div>
 
@@ -285,7 +285,7 @@ footer{
 <!-- ═══════════════════════════════════════════════════════════
      SECCIÓN 2 — JULIO EN CURSO (VISTA PRELIMINAR)
 ═══════════════════════════════════════════════════════════ -->
-<div class="sec">🔴 Agosto 2026 — En curso (día 3 de 31)
+<div class="sec">🔴 Septiembre 2026 — En curso (día 7 de 30)
   <span class="src-badge src-combo">Vista preliminar · datos parciales</span>
 </div>
 <div class="kpi-grid">
@@ -559,13 +559,13 @@ footer{
 <!-- ═══════════════════════════════════════════════════════════
      SECCIÓN 5 — RANKING DE PROFES (JULIO 2026)
 ═══════════════════════════════════════════════════════════ -->
-<div class="sec">🏆 Ranking de Profes — Julio 2026
+<div class="sec">🏆 Ranking de Profes — Agosto 2026
   <span class="src-badge src-wix">Wix Bookings · mes completo, 116 clases grupales · ⚠️ desglose por profe = primeros 6 días</span>
 </div>
 
 <div class="tcard" style="margin-bottom:18px">
   <div class="tcard-head">
-    Evaluación por Profesor/a — Julio 2026
+    Evaluación por Profesor/a — Agosto 2026
     <span class="badge" id="rankingCount"></span>
   </div>
   <div style="overflow-x:auto">
@@ -631,7 +631,7 @@ footer{
      SECCIÓN 6 — PERFILES DE PROFES (12 MESES)
 ═══════════════════════════════════════════════════════════ -->
 <div class="sec">📈 Perfiles de Profes — Evolución 12 meses
-  <span class="src-badge src-wix">Wix Bookings · ago-2025 a jul-2026</span>
+  <span class="src-badge src-wix">Wix Bookings · sep-2025 a ago-2026</span>
 </div>
 
 <div class="chart-grid">
@@ -644,7 +644,7 @@ footer{
 <div class="tcard" style="margin:18px 0">
   <div class="tcard-head">
     Tabla de evaluación — historial 12 meses
-    <span class="badge muted">ago-2025 → jul-2026</span>
+    <span class="badge muted">sep-2025 → ago-2026</span>
   </div>
   <div style="overflow-x:auto">
   <table>
@@ -709,88 +709,88 @@ footer{
 
 <script>
 // ═══════════════════════════════════════════════════════════
-// DATOS BASE — 13 meses (ago-2025 a ago-2026, el último parcial)
+// DATOS BASE — 13 meses (sep-2025 a sep-2026, el último parcial)
 // ═══════════════════════════════════════════════════════════
-const MONTHS = ['2025-08','2025-09','2025-10','2025-11','2025-12','2026-01','2026-02','2026-03','2026-04','2026-05','2026-06','2026-07','2026-08'];
-const MONTH_LABELS = ['Ago-25','Sep-25','Oct-25','Nov-25','Dic-25','Ene-26','Feb-26','Mar-26','Abr-26','May-26','Jun-26','Jul-26','Ago-26*'];
-const LAST_FULL = 11; // índice de julio-2026 (último mes cerrado)
+const MONTHS = ['2025-09','2025-10','2025-11','2025-12','2026-01','2026-02','2026-03','2026-04','2026-05','2026-06','2026-07','2026-08','2026-09'];
+const MONTH_LABELS = ['Sep-25','Oct-25','Nov-25','Dic-25','Ene-26','Feb-26','Mar-26','Abr-26','May-26','Jun-26','Jul-26','Ago-26','Sep-26*'];
+const LAST_FULL = 11; // índice de agosto-2026 (último mes cerrado)
 
 // Datos SOLO de clases grupales de yoga (excluye masajes/terapias 1-a-1,
 // que siempre cuentan "1 alumno" y distorsionaban el promedio — ver nota más abajo)
 const GLOBAL = {
-  sessions:   [127,131,135,124,129,136,116,116,123,120,137,116,31],
-  avg:        [5.7,5.1,5.4,5.8,5.1,4.9,5.4,6.3,5.8,5.9,5.9,6.2,1.6],
-  cancelRate: [10.3,9.2,7.2,7.2,8.6,4.0,4.5,3.8,10.6,10.0,9.4,8.7,3.8],
+  sessions:   [131,135,124,129,136,116,116,123,120,137,116,116,41],
+  avg:        [5.1,5.4,5.8,5.1,4.9,5.4,6.3,5.8,5.9,5.9,6.2,6.6,4.5],
+  cancelRate: [9.2,7.2,7.2,8.6,4.0,4.5,3.8,10.6,10.0,9.4,8.7,0,0],
 };
 
-const KPI1_TREND = [17,9,22,12,9,8,11,16,13,15,13,7,1]; // nuevos inscrit@s por mes (Notion)
+const KPI1_TREND = [9,20,12,9,9,10,18,13,15,13,6,9,1]; // nuevos inscrit@s por mes (Notion)
 
 // Bajas por mes — Notion campo "Fecha deserción/Pausa" (registra pausas + deserciones)
 // Criterio: cualquier registro con esa fecha completada, independiente del Estado actual.
-const DESERCIONES = [9,8,6,9,3,2,0,3,5,3,9,1,0]; // ago-25 → ago-26
+const DESERCIONES = [8,6,9,3,2,0,3,5,3,9,1,0,4]; // sep-25 → sep-26*
 
 const TEACHERS = {
   'Gita': {
-    sessions:[21,21,21,21,19,14,18,19,15,15,18,14,null],
-    avg:[5.7,5.7,6.1,6.7,5.8,6.1,7.5,8.2,5.3,5.9,7.4,7.4,null],
-    indiv:[20,17,14,27,19,12,19,11,10,21,23,12,null]
+    sessions:[21,21,21,19,14,18,19,15,15,18,14,20,8],
+    avg:[5.7,6.1,6.7,5.8,6.1,7.5,8.2,5.3,5.9,7.4,7.4,8.6,5.9],
+    indiv:[17,14,27,19,12,19,11,10,21,23,12,21,10]
   },
   'Esteban Gauna': {
-    sessions:[26,25,25,24,26,30,18,26,23,20,26,26,null],
-    avg:[6.9,6.6,7.0,7.5,5.9,4.6,4.1,5.7,5.8,7.4,7.4,7.9,null],
-    indiv:[29,13,22,16,21,12,7,4,16,15,17,24,null]
+    sessions:[25,25,24,26,30,18,26,23,20,26,26,24,11],
+    avg:[6.6,7.0,7.5,5.9,4.6,4.1,5.7,5.8,7.4,7.4,7.9,7.8,4.6],
+    indiv:[13,22,16,21,12,7,4,16,15,17,24,22,7]
   },
   'Nicolás Ibarra': {
-    sessions:[9,14,13,10,15,19,14,14,12,13,16,15,null],
-    avg:[4.6,4.7,6.2,6.7,5.9,5.4,4.8,5.9,6.8,4.7,6.0,5.5,null],
-    indiv:[3,8,9,6,9,9,12,5,8,16,10,3,null]
+    sessions:[14,13,10,15,19,14,14,12,13,16,15,10,3],
+    avg:[4.7,6.2,6.7,5.9,5.4,4.8,5.9,6.8,4.7,6.0,5.5,5.7,4.0],
+    indiv:[8,9,6,9,9,12,5,8,16,10,3,6,1]
   },
   'Consuelo Silva': {
-    sessions:[3,3,4,3,3,5,5,4,8,7,9,11,null],
-    avg:[2.3,3.0,3.5,7.0,2.7,6.2,5.4,6.8,9.9,13.7,9.9,8.4,null],
-    indiv:[14,14,19,12,23,17,25,38,38,35,39,9,null]
+    sessions:[3,4,3,3,5,5,4,8,7,9,11,14,6],
+    avg:[3.0,3.5,7.0,2.7,6.2,5.4,6.8,9.9,13.7,9.9,8.4,9.0,3.7],
+    indiv:[14,19,12,23,17,25,38,38,35,39,9,10,2]
   },
   'Vishvanath (Diego Maldonado)': {
-    sessions:[5,10,8,8,9,11,17,11,10,11,9,5,null],
-    avg:[5.0,3.5,4.6,4.5,4.8,3.6,4.3,6.2,4.7,4.6,5.8,5.2,null],
-    indiv:[2,0,0,6,2,0,0,0,0,0,1,1,null]
+    sessions:[10,8,8,9,11,17,11,10,11,9,5,8,3],
+    avg:[3.5,4.6,4.5,4.8,3.6,4.3,6.2,4.7,4.6,5.8,5.2,7.5,4.7],
+    indiv:[0,0,6,2,0,0,0,0,0,1,1,3,2]
   },
   'César Lillo': {
-    sessions:[8,4,5,4,3,4,3,4,10,10,12,13,null],
-    avg:[3.3,3.5,5.4,4.5,5.3,6.0,6.0,5.5,3.5,4.1,3.4,3.3,null],
-    indiv:[0,0,0,0,0,0,0,0,0,0,0,0,null]
+    sessions:[4,5,4,3,4,3,4,10,10,12,13,12,3],
+    avg:[3.5,5.4,4.5,5.3,6.0,6.0,5.5,3.5,4.1,3.4,3.3,3.9,3.3],
+    indiv:[0,0,0,0,0,0,0,0,0,0,0,0,0]
   },
   'Catalina Suckel': {
-    sessions:[null,3,4,4,7,5,11,8,12,9,10,9,null],
-    avg:[null,4.0,4.8,5.5,6.0,7.0,5.1,6.0,6.7,3.2,2.5,3.8,null],
-    indiv:[0,0,0,0,0,0,0,0,0,0,0,0,null]
+    sessions:[3,4,4,7,5,11,8,12,9,10,9,10,4],
+    avg:[4.0,4.8,5.5,6.0,7.0,5.1,6.0,6.7,3.2,2.5,3.8,3.7,2.8],
+    indiv:[0,0,0,0,0,0,0,0,0,0,0,0,0]
   },
   'Melissa Guajardo': {
-    sessions:[15,14,14,13,14,17,13,11,10,9,null,null,null],
-    avg:[8.2,6.6,6.1,5.8,3.9,5.0,5.9,6.0,5.3,5.9,null,null,null],
-    indiv:[0,0,0,0,0,0,0,0,0,0,0,null,null]
+    sessions:[14,14,13,14,17,13,11,10,9,null,null,null,null],
+    avg:[6.6,6.1,5.8,3.9,5.0,5.9,6.0,5.3,5.9,null,null,null,null],
+    indiv:[0,0,0,0,0,0,0,0,0,null,null,null,null]
   },
   'Constanza Aguayo': {
-    sessions:[8,8,7,8,7,7,6,5,6,8,9,8,null],
-    avg:[7.6,6.9,7.4,7.1,6.9,8.9,8.7,11.0,11.5,9.3,8.7,7.8,null],
-    indiv:[0,0,0,0,0,0,0,0,0,0,0,0,null]
+    sessions:[8,7,8,7,7,6,5,6,8,9,8,9,2],
+    avg:[6.9,7.4,7.1,6.9,8.9,8.7,11.0,11.5,9.3,8.7,7.8,8.3,7.5],
+    indiv:[0,0,0,0,0,0,0,0,0,0,0,1,1]
   },
   'Constanza Muñoz': {
-    sessions:[8,8,9,8,10,8,6,7,4,4,4,4,null],
-    avg:[5.6,5.3,5.9,7.3,7.0,5.8,5.2,6.1,10.3,9.0,10.5,13.8,null],
-    indiv:[0,0,0,0,1,0,0,1,0,0,0,0,null]
+    sessions:[8,9,8,10,8,6,7,4,4,4,4,null,null],
+    avg:[5.3,5.9,7.3,7.0,5.8,5.2,6.1,10.3,9.0,10.5,13.8,null,null],
+    indiv:[0,0,0,1,0,0,1,0,0,0,0,null,null]
   },
   'Paulina Osorio': {
-    sessions:[3,5,6,3,4,8,1,2,6,4,4,3,null],
-    avg:[1.3,1,1,1.3,1,1.1,1,1,1,1,1.0,1.0,null],
-    indiv:[0,0,0,0,0,0,0,0,0,0,0,1,null]
+    sessions:[5,6,3,4,8,1,2,6,4,4,3,1,null],
+    avg:[1,1,1.3,1,1.1,1,1,1,1,1.0,1.0,1.0,null],
+    indiv:[0,0,0,0,0,0,0,0,0,0,1,0,null]
   },
 };
 
-// Índices de NEW_TEACHERS: abr-26=0, may-26=1, jun-26=2, jul-26=3, ago-26*=4
+// Índices de NEW_TEACHERS: abr-26=0, may-26=1, jun-26=2, jul-26=3, ago-26=4, sep-26*=5
 const NEW_TEACHERS = [
-  { name:'Katha Villar',      sessions:[4,3,3,3,null], avg:[3.3,3.7,3.0,2.7,null], nota:'Activa desde abril 2026' },
-  { name:'Constanza Torres',  sessions:[4,4,11,2,null], avg:[2.8,2.3,3.6,3.0,null], nota:'Activa desde abril 2026' },
+  { name:'Katha Villar',      sessions:[4,3,3,3,1,null], avg:[3.3,3.7,3.0,2.7,1.0,null], nota:'Activa desde abril 2026' },
+  { name:'Constanza Torres',  sessions:[4,4,11,2,4,null], avg:[2.8,2.3,3.6,3.0,1.5,null], nota:'Activa desde abril 2026' },
 ];
 
 // Fidelización (alumnos recurrentes) — clases grupales, confirmadas, abr-jun 2026
@@ -823,7 +823,7 @@ document.getElementById('footerFecha').textContent = fmtDate(now);
 const P = ['#2e5c3e','#4a7c59','#7faf9e','#c9a96e','#1B4F91','#534AB7','#e8a840','#c0392b','#a3c4bc'];
 
 // ═══════════════════════════════════════════════════════════
-// RANKING JULIO 2026 (último mes cerrado, índice 11)
+// RANKING AGOSTO 2026 (último mes cerrado, índice 11)
 // ═══════════════════════════════════════════════════════════
 function buildRankingJulio() {
   const rows = [];
@@ -834,7 +834,7 @@ function buildRankingJulio() {
     rows.push({ name, sessions, avg, bookings: Math.round(sessions*avg) });
   }
   for (const t of NEW_TEACHERS) {
-    const s = t.sessions[3], a = t.avg[3]; // index 3 = julio (abr=0,may=1,jun=2,jul=3)
+    const s = t.sessions[4], a = t.avg[4]; // index 4 = agosto (abr=0,may=1,jun=2,jul=3,ago=4)
     if (s == null || s === 0) continue;
     rows.push({ name: t.name, sessions: s, avg: a, bookings: Math.round(s*a) });
   }
