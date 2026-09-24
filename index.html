@@ -699,6 +699,44 @@ footer{
   </div>
 </div>
 
+<!-- ═══════════════════════════════════════════════════════════
+     SECCIÓN 8 — LEADS Y CONVERSIÓN
+═══════════════════════════════════════════════════════════ -->
+<div class="sec">🎯 Leads y Conversión — Clases de Prueba a Inscrit@s
+  <span class="src-badge src-notion">Notion CRM · sep-2025 a sep-2026</span>
+</div>
+
+<div class="chart-grid">
+  <div class="chart-card" style="grid-column:span 2">
+    <h3>🎯 Leads (clases de prueba) vs nuevos inscrit@s por mes</h3>
+    <div class="chart-wrap xtall"><canvas id="cLeads"></canvas></div>
+  </div>
+</div>
+
+<div class="tcard" style="margin:18px 0">
+  <div class="tcard-head">
+    Resumen de conversión por mes
+    <span class="badge">lead → inscrit@</span>
+  </div>
+  <div style="overflow-x:auto">
+  <table>
+    <thead>
+      <tr>
+        <th>Mes</th>
+        <th style="text-align:center">Leads<br>(Clase Prueba)</th>
+        <th style="text-align:center">Nuevos<br>Inscrit@s</th>
+        <th style="min-width:160px">Tasa de Conversión</th>
+      </tr>
+    </thead>
+    <tbody id="leadsConvBody"></tbody>
+  </table>
+  </div>
+  <div class="note-box" style="margin:12px 16px">
+    <strong>Tasa de conversión</strong> = Nuevos inscrit@s / Leads (clases de prueba) del mismo mes. Puede haber desfase de hasta 1 mes entre la clase de prueba y la inscripción efectiva.
+    <br><span style="color:#2e5c3e;font-weight:600">≥40%</span> excelente · <span style="color:#c9a96e;font-weight:600">20–39%</span> normal · <span style="color:#c0392b;font-weight:600">&lt;20%</span> bajo
+  </div>
+</div>
+
 </div><!-- /container -->
 
 <footer>
@@ -718,12 +756,13 @@ const LAST_FULL = 11; // índice de agosto-2026 (último mes cerrado)
 // Datos SOLO de clases grupales de yoga (excluye masajes/terapias 1-a-1,
 // que siempre cuentan "1 alumno" y distorsionaban el promedio — ver nota más abajo)
 const GLOBAL = {
-  sessions:   [131,135,124,129,136,116,116,123,120,137,116,116,41],
-  avg:        [5.1,5.4,5.8,5.1,4.9,5.4,6.3,5.8,5.9,5.9,6.2,6.6,4.5],
+  sessions:   [131,135,124,129,136,116,116,123,120,137,116,116,95],
+  avg:        [5.1,5.4,5.8,5.1,4.9,5.4,6.3,5.8,5.9,5.9,6.2,6.6,6.0],
   cancelRate: [9.2,7.2,7.2,8.6,4.0,4.5,3.8,10.6,10.0,9.4,8.7,0,0],
 };
 
-const KPI1_TREND = [9,20,12,9,9,10,18,13,15,13,6,9,1]; // nuevos inscrit@s por mes (Notion)
+const KPI1_TREND = [9,20,12,9,9,10,18,13,15,13,6,9,3]; // nuevos inscrit@s por mes (Notion)
+const LEADS = [15,23,22,14,15,11,19,28,22,11,2,22,11]; // clases de prueba (leads) por mes (Notion)
 
 // Bajas por mes — Notion campo "Fecha deserción/Pausa" (registra pausas + deserciones)
 // Criterio: cualquier registro con esa fecha completada, independiente del Estado actual.
@@ -731,38 +770,38 @@ const DESERCIONES = [8,6,9,3,2,0,3,5,3,9,1,0,4]; // sep-25 → sep-26*
 
 const TEACHERS = {
   'Gita': {
-    sessions:[21,21,21,19,14,18,19,15,15,18,14,20,8],
-    avg:[5.7,6.1,6.7,5.8,6.1,7.5,8.2,5.3,5.9,7.4,7.4,8.6,5.9],
-    indiv:[17,14,27,19,12,19,11,10,21,23,12,21,10]
+    sessions:[21,21,21,19,14,18,19,15,15,18,14,20,18],
+    avg:[5.7,6.1,6.7,5.8,6.1,7.5,8.2,5.3,5.9,7.4,7.4,8.6,7.9],
+    indiv:[17,14,27,19,12,19,11,10,21,23,12,21,18]
   },
   'Esteban Gauna': {
-    sessions:[25,25,24,26,30,18,26,23,20,26,26,24,11],
-    avg:[6.6,7.0,7.5,5.9,4.6,4.1,5.7,5.8,7.4,7.4,7.9,7.8,4.6],
-    indiv:[13,22,16,21,12,7,4,16,15,17,24,22,7]
+    sessions:[25,25,24,26,30,18,26,23,20,26,26,24,24],
+    avg:[6.6,7.0,7.5,5.9,4.6,4.1,5.7,5.8,7.4,7.4,7.9,7.8,5.9],
+    indiv:[13,22,16,21,12,7,4,16,15,17,24,22,16]
   },
   'Nicolás Ibarra': {
-    sessions:[14,13,10,15,19,14,14,12,13,16,15,10,3],
-    avg:[4.7,6.2,6.7,5.9,5.4,4.8,5.9,6.8,4.7,6.0,5.5,5.7,4.0],
-    indiv:[8,9,6,9,9,12,5,8,16,10,3,6,1]
+    sessions:[14,13,10,15,19,14,14,12,13,16,15,10,11],
+    avg:[4.7,6.2,6.7,5.9,5.4,4.8,5.9,6.8,4.7,6.0,5.5,5.7,4.2],
+    indiv:[8,9,6,9,9,12,5,8,16,10,3,6,3]
   },
   'Consuelo Silva': {
-    sessions:[3,4,3,3,5,5,4,8,7,9,11,14,6],
-    avg:[3.0,3.5,7.0,2.7,6.2,5.4,6.8,9.9,13.7,9.9,8.4,9.0,3.7],
-    indiv:[14,19,12,23,17,25,38,38,35,39,9,10,2]
+    sessions:[3,4,3,3,5,5,4,8,7,9,11,14,9],
+    avg:[3.0,3.5,7.0,2.7,6.2,5.4,6.8,9.9,13.7,9.9,8.4,9.0,8.0],
+    indiv:[14,19,12,23,17,25,38,38,35,39,9,10,16]
   },
   'Vishvanath (Diego Maldonado)': {
-    sessions:[10,8,8,9,11,17,11,10,11,9,5,8,3],
-    avg:[3.5,4.6,4.5,4.8,3.6,4.3,6.2,4.7,4.6,5.8,5.2,7.5,4.7],
+    sessions:[10,8,8,9,11,17,11,10,11,9,5,8,7],
+    avg:[3.5,4.6,4.5,4.8,3.6,4.3,6.2,4.7,4.6,5.8,5.2,7.5,7.6],
     indiv:[0,0,6,2,0,0,0,0,0,1,1,3,2]
   },
   'César Lillo': {
-    sessions:[4,5,4,3,4,3,4,10,10,12,13,12,3],
+    sessions:[4,5,4,3,4,3,4,10,10,12,13,12,11],
     avg:[3.5,5.4,4.5,5.3,6.0,6.0,5.5,3.5,4.1,3.4,3.3,3.9,3.3],
     indiv:[0,0,0,0,0,0,0,0,0,0,0,0,0]
   },
   'Catalina Suckel': {
-    sessions:[3,4,4,7,5,11,8,12,9,10,9,10,4],
-    avg:[4.0,4.8,5.5,6.0,7.0,5.1,6.0,6.7,3.2,2.5,3.8,3.7,2.8],
+    sessions:[3,4,4,7,5,11,8,12,9,10,9,10,7],
+    avg:[4.0,4.8,5.5,6.0,7.0,5.1,6.0,6.7,3.2,2.5,3.8,3.7,3.9],
     indiv:[0,0,0,0,0,0,0,0,0,0,0,0,0]
   },
   'Melissa Guajardo': {
@@ -771,8 +810,8 @@ const TEACHERS = {
     indiv:[0,0,0,0,0,0,0,0,0,null,null,null,null]
   },
   'Constanza Aguayo': {
-    sessions:[8,7,8,7,7,6,5,6,8,9,8,9,2],
-    avg:[6.9,7.4,7.1,6.9,8.9,8.7,11.0,11.5,9.3,8.7,7.8,8.3,7.5],
+    sessions:[8,7,8,7,7,6,5,6,8,9,8,9,8],
+    avg:[6.9,7.4,7.1,6.9,8.9,8.7,11.0,11.5,9.3,8.7,7.8,8.3,6.3],
     indiv:[0,0,0,0,0,0,0,0,0,0,0,1,1]
   },
   'Constanza Muñoz': {
@@ -1188,6 +1227,82 @@ new Chart(document.getElementById('cEmbudo'), {
     }
   }
 });
+
+// ═══════════════════════════════════════════════════════════
+// SECCIÓN 8 — LEADS Y CONVERSIÓN
+// ═══════════════════════════════════════════════════════════
+new Chart(document.getElementById('cLeads'), {
+  type: 'bar',
+  data: {
+    labels: MONTH_LABELS,
+    datasets: [
+      {
+        type: 'bar',
+        label: 'Leads (Clase Prueba)',
+        data: LEADS,
+        backgroundColor: 'rgba(201,169,110,0.7)',
+        borderColor: '#c9a96e',
+        borderWidth: 1,
+        order: 2,
+        yAxisID: 'y'
+      },
+      {
+        type: 'line',
+        label: 'Nuevos Inscrit@s',
+        data: KPI1_TREND,
+        borderColor: '#2e5c3e',
+        backgroundColor: '#2e5c3e',
+        tension: 0.35,
+        pointRadius: 5,
+        pointHoverRadius: 7,
+        order: 1,
+        yAxisID: 'y'
+      },
+      {
+        type: 'line',
+        label: 'Tasa conversión %',
+        data: LEADS.map((l,i) => l > 0 ? Math.round(KPI1_TREND[i]/l*100) : 0),
+        borderColor: '#1B4F91',
+        backgroundColor: '#1B4F91',
+        borderDash: [5,3],
+        tension: 0.3,
+        pointRadius: 4,
+        order: 0,
+        yAxisID: 'y1'
+      }
+    ]
+  },
+  options: {
+    ...baseOpts,
+    plugins: { legend: { display: true, position: 'bottom', labels: { font: { size: 11 }, boxWidth: 12 } } },
+    scales: {
+      x: { grid: { display: false }, ticks: { font: { size: 10 } } },
+      y: { position: 'left', grid: { color: '#eee' }, beginAtZero: true, title: { display: true, text: 'Personas', font: { size: 10 } } },
+      y1: { position: 'right', grid: { display: false }, beginAtZero: true, max: 100, title: { display: true, text: '% conversión', font: { size: 10 } } }
+    }
+  }
+});
+
+// Tabla de conversión
+(function(){
+  const tbody = document.getElementById('leadsConvBody');
+  MONTH_LABELS.forEach((lbl, i) => {
+    const leads = LEADS[i] || 0;
+    const inscritos = KPI1_TREND[i] || 0;
+    const conv = leads > 0 ? Math.round(inscritos / leads * 100) : 0;
+    const color = conv >= 40 ? '#2e5c3e' : conv >= 20 ? '#c9a96e' : '#c0392b';
+    const bar = leads > 0 ? `<div style="height:6px;border-radius:3px;background:${color};width:${Math.min(conv,100)}%;min-width:4px;margin-top:3px"></div>` : '';
+    const isPartial = i >= MONTH_LABELS.length - 1;
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${lbl}${isPartial ? ' <span class="badge warn">parcial</span>' : ''}</td>
+      <td style="text-align:center">${leads}</td>
+      <td style="text-align:center">${inscritos}</td>
+      <td style="min-width:120px"><span style="color:${color};font-weight:600">${leads>0?conv+'%':'—'}</span>${bar}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+})();
 
 </script>
 </body>
