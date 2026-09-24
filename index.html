@@ -708,7 +708,7 @@ footer{
 
 <div class="chart-grid">
   <div class="chart-card" style="grid-column:span 2">
-    <h3>🎯 Leads (clases de prueba) vs nuevos inscrit@s por mes</h3>
+    <h3>🎯 Embudo de conversión — Leads CRM · Clase Prueba · Inscrit@s</h3>
     <div class="chart-wrap xtall"><canvas id="cLeads"></canvas></div>
   </div>
 </div>
@@ -723,16 +723,20 @@ footer{
     <thead>
       <tr>
         <th>Mes</th>
-        <th style="text-align:center">Leads<br>(Clase Prueba)</th>
+        <th style="text-align:center">Leads<br>CRM</th>
+        <th style="text-align:center">Clase de<br>Prueba</th>
         <th style="text-align:center">Nuevos<br>Inscrit@s</th>
-        <th style="min-width:160px">Tasa de Conversión</th>
+        <th style="text-align:center">Conv.<br>CRM→Inscrit@</th>
+        <th style="text-align:center">Conv.<br>Prueba→Inscrit@</th>
       </tr>
     </thead>
     <tbody id="leadsConvBody"></tbody>
   </table>
   </div>
   <div class="note-box" style="margin:12px 16px">
-    <strong>Tasa de conversión</strong> = Nuevos inscrit@s / Leads (clases de prueba) del mismo mes. Puede haber desfase de hasta 1 mes entre la clase de prueba y la inscripción efectiva.
+    <strong>Conv. CRM→Inscrit@</strong> = inscrit@s / total prospectos nuevos en el mes (todos quienes contactaron).
+    <strong>Conv. Prueba→Inscrit@</strong> = inscrit@s / quienes tomaron clase de prueba ese mes.
+    Puede haber desfase de 1 mes entre la clase de prueba y la inscripción efectiva.
     <br><span style="color:#2e5c3e;font-weight:600">≥40%</span> excelente · <span style="color:#c9a96e;font-weight:600">20–39%</span> normal · <span style="color:#c0392b;font-weight:600">&lt;20%</span> bajo
   </div>
 </div>
@@ -762,7 +766,8 @@ const GLOBAL = {
 };
 
 const KPI1_TREND = [9,20,12,9,9,10,18,13,15,13,6,9,3]; // nuevos inscrit@s por mes (Notion)
-const LEADS = [15,23,22,14,15,11,19,28,22,11,2,22,11]; // clases de prueba (leads) por mes (Notion)
+const LEADS_CRM    = [40,77,63,40,58,56,74,41,66,66,56,58,16]; // todos los prospectos nuevos por mes (fecha creación Notion)
+const LEADS_PRUEBA = [15,23,22,14,15,11,19,28,22,11,2,22,11]; // de esos: tomaron clase de prueba (Notion)
 
 // Bajas por mes — Notion campo "Fecha deserción/Pausa" (registra pausas + deserciones)
 // Criterio: cualquier registro con esa fecha completada, independiente del Estado actual.
@@ -1238,12 +1243,22 @@ new Chart(document.getElementById('cLeads'), {
     datasets: [
       {
         type: 'bar',
-        label: 'Leads (Clase Prueba)',
-        data: LEADS,
+        label: 'Leads CRM (total prospectos)',
+        data: LEADS_CRM,
+        backgroundColor: 'rgba(83,74,183,0.25)',
+        borderColor: '#534AB7',
+        borderWidth: 1,
+        order: 4,
+        yAxisID: 'y'
+      },
+      {
+        type: 'bar',
+        label: 'Tomaron Clase Prueba',
+        data: LEADS_PRUEBA,
         backgroundColor: 'rgba(201,169,110,0.7)',
         borderColor: '#c9a96e',
         borderWidth: 1,
-        order: 2,
+        order: 3,
         yAxisID: 'y'
       },
       {
@@ -1255,18 +1270,30 @@ new Chart(document.getElementById('cLeads'), {
         tension: 0.35,
         pointRadius: 5,
         pointHoverRadius: 7,
-        order: 1,
+        order: 2,
         yAxisID: 'y'
       },
       {
         type: 'line',
-        label: 'Tasa conversión %',
-        data: LEADS.map((l,i) => l > 0 ? Math.round(KPI1_TREND[i]/l*100) : 0),
-        borderColor: '#1B4F91',
-        backgroundColor: '#1B4F91',
-        borderDash: [5,3],
+        label: '% Conv. CRM→Inscrit@',
+        data: LEADS_CRM.map((l,i) => l > 0 ? Math.round(KPI1_TREND[i]/l*100) : 0),
+        borderColor: '#534AB7',
+        backgroundColor: '#534AB7',
+        borderDash: [6,3],
         tension: 0.3,
-        pointRadius: 4,
+        pointRadius: 3,
+        order: 1,
+        yAxisID: 'y1'
+      },
+      {
+        type: 'line',
+        label: '% Conv. Prueba→Inscrit@',
+        data: LEADS_PRUEBA.map((l,i) => l > 0 ? Math.round(KPI1_TREND[i]/l*100) : 0),
+        borderColor: '#c9a96e',
+        backgroundColor: '#c9a96e',
+        borderDash: [3,2],
+        tension: 0.3,
+        pointRadius: 3,
         order: 0,
         yAxisID: 'y1'
       }
@@ -1274,7 +1301,7 @@ new Chart(document.getElementById('cLeads'), {
   },
   options: {
     ...baseOpts,
-    plugins: { legend: { display: true, position: 'bottom', labels: { font: { size: 11 }, boxWidth: 12 } } },
+    plugins: { legend: { display: true, position: 'bottom', labels: { font: { size: 10 }, boxWidth: 10 } } },
     scales: {
       x: { grid: { display: false }, ticks: { font: { size: 10 } } },
       y: { position: 'left', grid: { color: '#eee' }, beginAtZero: true, title: { display: true, text: 'Personas', font: { size: 10 } } },
@@ -1283,22 +1310,26 @@ new Chart(document.getElementById('cLeads'), {
   }
 });
 
-// Tabla de conversión
+// Tabla de conversión con ambas tasas
 (function(){
   const tbody = document.getElementById('leadsConvBody');
   MONTH_LABELS.forEach((lbl, i) => {
-    const leads = LEADS[i] || 0;
+    const crm = LEADS_CRM[i] || 0;
+    const prueba = LEADS_PRUEBA[i] || 0;
     const inscritos = KPI1_TREND[i] || 0;
-    const conv = leads > 0 ? Math.round(inscritos / leads * 100) : 0;
-    const color = conv >= 40 ? '#2e5c3e' : conv >= 20 ? '#c9a96e' : '#c0392b';
-    const bar = leads > 0 ? `<div style="height:6px;border-radius:3px;background:${color};width:${Math.min(conv,100)}%;min-width:4px;margin-top:3px"></div>` : '';
+    const convCrm = crm > 0 ? Math.round(inscritos / crm * 100) : 0;
+    const convPrueba = prueba > 0 ? Math.round(inscritos / prueba * 100) : 0;
+    const colorCrm = convCrm >= 30 ? '#2e5c3e' : convCrm >= 15 ? '#c9a96e' : '#c0392b';
+    const colorPrueba = convPrueba >= 50 ? '#2e5c3e' : convPrueba >= 30 ? '#c9a96e' : '#c0392b';
     const isPartial = i >= MONTH_LABELS.length - 1;
     const tr = document.createElement('tr');
     tr.innerHTML = `
       <td>${lbl}${isPartial ? ' <span class="badge warn">parcial</span>' : ''}</td>
-      <td style="text-align:center">${leads}</td>
+      <td style="text-align:center">${crm}</td>
+      <td style="text-align:center">${prueba}</td>
       <td style="text-align:center">${inscritos}</td>
-      <td style="min-width:120px"><span style="color:${color};font-weight:600">${leads>0?conv+'%':'—'}</span>${bar}</td>
+      <td style="text-align:center"><span style="color:${colorCrm};font-weight:600">${crm>0?convCrm+'%':'—'}</span></td>
+      <td style="text-align:center"><span style="color:${colorPrueba};font-weight:600">${prueba>0?convPrueba+'%':'—'}</span></td>
     `;
     tbody.appendChild(tr);
   });
